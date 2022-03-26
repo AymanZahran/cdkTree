@@ -1,0 +1,79 @@
+id   :  App
+path :  
+lib  :  aws-cdk-lib.App
+    id   :  Tree
+    path :  Tree
+    lib  :  constructs.Construct
+    id   :  sqs-sns
+    path :  sqs-sns
+    lib  :  aws-cdk-lib.Stack
+        id   :  SqsSnsQueue
+        path :  sqs-sns/SqsSnsQueue
+        lib  :  aws-cdk-lib.aws_sqs.Queue
+            id   :  Resource
+            path :  sqs-sns/SqsSnsQueue/Resource
+            lib  :  aws-cdk-lib.aws_sqs.CfnQueue
+            attributes  :  
+                aws:cdk:cloudformation:props:
+                  visibilityTimeout: 300
+                aws:cdk:cloudformation:type: AWS::SQS::Queue
+            id   :  Policy
+            path :  sqs-sns/SqsSnsQueue/Policy
+            lib  :  aws-cdk-lib.aws_sqs.QueuePolicy
+                id   :  Resource
+                path :  sqs-sns/SqsSnsQueue/Policy/Resource
+                lib  :  aws-cdk-lib.aws_sqs.CfnQueuePolicy
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      policyDocument:
+                        Statement:
+                        - Action: sqs:SendMessage
+                          Condition:
+                            ArnEquals:
+                              aws:SourceArn:
+                                Ref: SqsSnsTopic1D48E92B
+                          Effect: Allow
+                          Principal:
+                            Service: sns.amazonaws.com
+                          Resource:
+                            Fn::GetAtt:
+                            - SqsSnsQueue9429D0E8
+                            - Arn
+                        Version: '2012-10-17'
+                      queues:
+                      - Ref: SqsSnsQueue9429D0E8
+                    aws:cdk:cloudformation:type: AWS::SQS::QueuePolicy
+            id   :  sqssnsSqsSnsTopicC04DE037
+            path :  sqs-sns/SqsSnsQueue/sqssnsSqsSnsTopicC04DE037
+            lib  :  aws-cdk-lib.aws_sns.Subscription
+                id   :  Resource
+                path :  sqs-sns/SqsSnsQueue/sqssnsSqsSnsTopicC04DE037/Resource
+                lib  :  aws-cdk-lib.aws_sns.CfnSubscription
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      endpoint:
+                        Fn::GetAtt:
+                        - SqsSnsQueue9429D0E8
+                        - Arn
+                      protocol: sqs
+                      topicArn:
+                        Ref: SqsSnsTopic1D48E92B
+                    aws:cdk:cloudformation:type: AWS::SNS::Subscription
+        id   :  SqsSnsTopic
+        path :  sqs-sns/SqsSnsTopic
+        lib  :  aws-cdk-lib.aws_sns.Topic
+            id   :  Resource
+            path :  sqs-sns/SqsSnsTopic/Resource
+            lib  :  aws-cdk-lib.aws_sns.CfnTopic
+            attributes  :  
+                aws:cdk:cloudformation:props: {}
+                aws:cdk:cloudformation:type: AWS::SNS::Topic
+        id   :  CDKMetadata
+        path :  sqs-sns/CDKMetadata
+        lib  :  constructs.Construct
+            id   :  Default
+            path :  sqs-sns/CDKMetadata/Default
+            lib  :  aws-cdk-lib.CfnResource
+            id   :  Condition
+            path :  sqs-sns/CDKMetadata/Condition
+            lib  :  aws-cdk-lib.CfnCondition

@@ -1,0 +1,622 @@
+id   :  App
+path :  
+lib  :  aws-cdk-lib.App
+    id   :  Tree
+    path :  Tree
+    lib  :  constructs.Construct
+    id   :  fargate
+    path :  fargate
+    lib  :  aws-cdk-lib.Stack
+        id   :  VPC
+        path :  fargate/VPC
+        lib  :  aws-cdk-lib.aws_ec2.Vpc
+            id   :  Resource
+            path :  fargate/VPC/Resource
+            lib  :  aws-cdk-lib.aws_ec2.CfnVPC
+            attributes  :  
+                aws:cdk:cloudformation:props:
+                  cidrBlock: 10.0.0.0/16
+                  enableDnsHostnames: true
+                  enableDnsSupport: true
+                  instanceTenancy: default
+                  tags:
+                  - key: Name
+                    value: fargate/VPC
+                aws:cdk:cloudformation:type: AWS::EC2::VPC
+            id   :  PublicSubnet1
+            path :  fargate/VPC/PublicSubnet1
+            lib  :  aws-cdk-lib.aws_ec2.PublicSubnet
+                id   :  Subnet
+                path :  fargate/VPC/PublicSubnet1/Subnet
+                lib  :  aws-cdk-lib.aws_ec2.CfnSubnet
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      availabilityZone:
+                        Fn::Select:
+                        - 0
+                        - Fn::GetAZs: ''
+                      cidrBlock: 10.0.0.0/18
+                      mapPublicIpOnLaunch: true
+                      tags:
+                      - key: aws-cdk:subnet-name
+                        value: Public
+                      - key: aws-cdk:subnet-type
+                        value: Public
+                      - key: Name
+                        value: fargate/VPC/PublicSubnet1
+                      vpcId:
+                        Ref: VPCB9E5F0B4
+                    aws:cdk:cloudformation:type: AWS::EC2::Subnet
+                id   :  Acl
+                path :  fargate/VPC/PublicSubnet1/Acl
+                lib  :  aws-cdk-lib.Resource
+                id   :  RouteTable
+                path :  fargate/VPC/PublicSubnet1/RouteTable
+                lib  :  aws-cdk-lib.aws_ec2.CfnRouteTable
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      tags:
+                      - key: Name
+                        value: fargate/VPC/PublicSubnet1
+                      vpcId:
+                        Ref: VPCB9E5F0B4
+                    aws:cdk:cloudformation:type: AWS::EC2::RouteTable
+                id   :  RouteTableAssociation
+                path :  fargate/VPC/PublicSubnet1/RouteTableAssociation
+                lib  :  aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      routeTableId:
+                        Ref: VPCPublicSubnet1RouteTableFEE4B781
+                      subnetId:
+                        Ref: VPCPublicSubnet1SubnetB4246D30
+                    aws:cdk:cloudformation:type: AWS::EC2::SubnetRouteTableAssociation
+                id   :  DefaultRoute
+                path :  fargate/VPC/PublicSubnet1/DefaultRoute
+                lib  :  aws-cdk-lib.aws_ec2.CfnRoute
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      destinationCidrBlock: 0.0.0.0/0
+                      gatewayId:
+                        Ref: VPCIGWB7E252D3
+                      routeTableId:
+                        Ref: VPCPublicSubnet1RouteTableFEE4B781
+                    aws:cdk:cloudformation:type: AWS::EC2::Route
+                id   :  EIP
+                path :  fargate/VPC/PublicSubnet1/EIP
+                lib  :  aws-cdk-lib.aws_ec2.CfnEIP
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      domain: vpc
+                      tags:
+                      - key: Name
+                        value: fargate/VPC/PublicSubnet1
+                    aws:cdk:cloudformation:type: AWS::EC2::EIP
+                id   :  NATGateway
+                path :  fargate/VPC/PublicSubnet1/NATGateway
+                lib  :  aws-cdk-lib.aws_ec2.CfnNatGateway
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      allocationId:
+                        Fn::GetAtt:
+                        - VPCPublicSubnet1EIP6AD938E8
+                        - AllocationId
+                      subnetId:
+                        Ref: VPCPublicSubnet1SubnetB4246D30
+                      tags:
+                      - key: Name
+                        value: fargate/VPC/PublicSubnet1
+                    aws:cdk:cloudformation:type: AWS::EC2::NatGateway
+            id   :  PublicSubnet2
+            path :  fargate/VPC/PublicSubnet2
+            lib  :  aws-cdk-lib.aws_ec2.PublicSubnet
+                id   :  Subnet
+                path :  fargate/VPC/PublicSubnet2/Subnet
+                lib  :  aws-cdk-lib.aws_ec2.CfnSubnet
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      availabilityZone:
+                        Fn::Select:
+                        - 1
+                        - Fn::GetAZs: ''
+                      cidrBlock: 10.0.64.0/18
+                      mapPublicIpOnLaunch: true
+                      tags:
+                      - key: aws-cdk:subnet-name
+                        value: Public
+                      - key: aws-cdk:subnet-type
+                        value: Public
+                      - key: Name
+                        value: fargate/VPC/PublicSubnet2
+                      vpcId:
+                        Ref: VPCB9E5F0B4
+                    aws:cdk:cloudformation:type: AWS::EC2::Subnet
+                id   :  Acl
+                path :  fargate/VPC/PublicSubnet2/Acl
+                lib  :  aws-cdk-lib.Resource
+                id   :  RouteTable
+                path :  fargate/VPC/PublicSubnet2/RouteTable
+                lib  :  aws-cdk-lib.aws_ec2.CfnRouteTable
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      tags:
+                      - key: Name
+                        value: fargate/VPC/PublicSubnet2
+                      vpcId:
+                        Ref: VPCB9E5F0B4
+                    aws:cdk:cloudformation:type: AWS::EC2::RouteTable
+                id   :  RouteTableAssociation
+                path :  fargate/VPC/PublicSubnet2/RouteTableAssociation
+                lib  :  aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      routeTableId:
+                        Ref: VPCPublicSubnet2RouteTable6F1A15F1
+                      subnetId:
+                        Ref: VPCPublicSubnet2Subnet74179F39
+                    aws:cdk:cloudformation:type: AWS::EC2::SubnetRouteTableAssociation
+                id   :  DefaultRoute
+                path :  fargate/VPC/PublicSubnet2/DefaultRoute
+                lib  :  aws-cdk-lib.aws_ec2.CfnRoute
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      destinationCidrBlock: 0.0.0.0/0
+                      gatewayId:
+                        Ref: VPCIGWB7E252D3
+                      routeTableId:
+                        Ref: VPCPublicSubnet2RouteTable6F1A15F1
+                    aws:cdk:cloudformation:type: AWS::EC2::Route
+                id   :  EIP
+                path :  fargate/VPC/PublicSubnet2/EIP
+                lib  :  aws-cdk-lib.aws_ec2.CfnEIP
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      domain: vpc
+                      tags:
+                      - key: Name
+                        value: fargate/VPC/PublicSubnet2
+                    aws:cdk:cloudformation:type: AWS::EC2::EIP
+                id   :  NATGateway
+                path :  fargate/VPC/PublicSubnet2/NATGateway
+                lib  :  aws-cdk-lib.aws_ec2.CfnNatGateway
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      allocationId:
+                        Fn::GetAtt:
+                        - VPCPublicSubnet2EIP4947BC00
+                        - AllocationId
+                      subnetId:
+                        Ref: VPCPublicSubnet2Subnet74179F39
+                      tags:
+                      - key: Name
+                        value: fargate/VPC/PublicSubnet2
+                    aws:cdk:cloudformation:type: AWS::EC2::NatGateway
+            id   :  PrivateSubnet1
+            path :  fargate/VPC/PrivateSubnet1
+            lib  :  aws-cdk-lib.aws_ec2.PrivateSubnet
+                id   :  Subnet
+                path :  fargate/VPC/PrivateSubnet1/Subnet
+                lib  :  aws-cdk-lib.aws_ec2.CfnSubnet
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      availabilityZone:
+                        Fn::Select:
+                        - 0
+                        - Fn::GetAZs: ''
+                      cidrBlock: 10.0.128.0/18
+                      mapPublicIpOnLaunch: false
+                      tags:
+                      - key: aws-cdk:subnet-name
+                        value: Private
+                      - key: aws-cdk:subnet-type
+                        value: Private
+                      - key: Name
+                        value: fargate/VPC/PrivateSubnet1
+                      vpcId:
+                        Ref: VPCB9E5F0B4
+                    aws:cdk:cloudformation:type: AWS::EC2::Subnet
+                id   :  Acl
+                path :  fargate/VPC/PrivateSubnet1/Acl
+                lib  :  aws-cdk-lib.Resource
+                id   :  RouteTable
+                path :  fargate/VPC/PrivateSubnet1/RouteTable
+                lib  :  aws-cdk-lib.aws_ec2.CfnRouteTable
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      tags:
+                      - key: Name
+                        value: fargate/VPC/PrivateSubnet1
+                      vpcId:
+                        Ref: VPCB9E5F0B4
+                    aws:cdk:cloudformation:type: AWS::EC2::RouteTable
+                id   :  RouteTableAssociation
+                path :  fargate/VPC/PrivateSubnet1/RouteTableAssociation
+                lib  :  aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      routeTableId:
+                        Ref: VPCPrivateSubnet1RouteTableBE8A6027
+                      subnetId:
+                        Ref: VPCPrivateSubnet1Subnet8BCA10E0
+                    aws:cdk:cloudformation:type: AWS::EC2::SubnetRouteTableAssociation
+                id   :  DefaultRoute
+                path :  fargate/VPC/PrivateSubnet1/DefaultRoute
+                lib  :  aws-cdk-lib.aws_ec2.CfnRoute
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      destinationCidrBlock: 0.0.0.0/0
+                      natGatewayId:
+                        Ref: VPCPublicSubnet1NATGatewayE0556630
+                      routeTableId:
+                        Ref: VPCPrivateSubnet1RouteTableBE8A6027
+                    aws:cdk:cloudformation:type: AWS::EC2::Route
+            id   :  PrivateSubnet2
+            path :  fargate/VPC/PrivateSubnet2
+            lib  :  aws-cdk-lib.aws_ec2.PrivateSubnet
+                id   :  Subnet
+                path :  fargate/VPC/PrivateSubnet2/Subnet
+                lib  :  aws-cdk-lib.aws_ec2.CfnSubnet
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      availabilityZone:
+                        Fn::Select:
+                        - 1
+                        - Fn::GetAZs: ''
+                      cidrBlock: 10.0.192.0/18
+                      mapPublicIpOnLaunch: false
+                      tags:
+                      - key: aws-cdk:subnet-name
+                        value: Private
+                      - key: aws-cdk:subnet-type
+                        value: Private
+                      - key: Name
+                        value: fargate/VPC/PrivateSubnet2
+                      vpcId:
+                        Ref: VPCB9E5F0B4
+                    aws:cdk:cloudformation:type: AWS::EC2::Subnet
+                id   :  Acl
+                path :  fargate/VPC/PrivateSubnet2/Acl
+                lib  :  aws-cdk-lib.Resource
+                id   :  RouteTable
+                path :  fargate/VPC/PrivateSubnet2/RouteTable
+                lib  :  aws-cdk-lib.aws_ec2.CfnRouteTable
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      tags:
+                      - key: Name
+                        value: fargate/VPC/PrivateSubnet2
+                      vpcId:
+                        Ref: VPCB9E5F0B4
+                    aws:cdk:cloudformation:type: AWS::EC2::RouteTable
+                id   :  RouteTableAssociation
+                path :  fargate/VPC/PrivateSubnet2/RouteTableAssociation
+                lib  :  aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      routeTableId:
+                        Ref: VPCPrivateSubnet2RouteTable0A19E10E
+                      subnetId:
+                        Ref: VPCPrivateSubnet2SubnetCFCDAA7A
+                    aws:cdk:cloudformation:type: AWS::EC2::SubnetRouteTableAssociation
+                id   :  DefaultRoute
+                path :  fargate/VPC/PrivateSubnet2/DefaultRoute
+                lib  :  aws-cdk-lib.aws_ec2.CfnRoute
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      destinationCidrBlock: 0.0.0.0/0
+                      natGatewayId:
+                        Ref: VPCPublicSubnet2NATGateway3C070193
+                      routeTableId:
+                        Ref: VPCPrivateSubnet2RouteTable0A19E10E
+                    aws:cdk:cloudformation:type: AWS::EC2::Route
+            id   :  IGW
+            path :  fargate/VPC/IGW
+            lib  :  aws-cdk-lib.aws_ec2.CfnInternetGateway
+            attributes  :  
+                aws:cdk:cloudformation:props:
+                  tags:
+                  - key: Name
+                    value: fargate/VPC
+                aws:cdk:cloudformation:type: AWS::EC2::InternetGateway
+            id   :  VPCGW
+            path :  fargate/VPC/VPCGW
+            lib  :  aws-cdk-lib.aws_ec2.CfnVPCGatewayAttachment
+            attributes  :  
+                aws:cdk:cloudformation:props:
+                  internetGatewayId:
+                    Ref: VPCIGWB7E252D3
+                  vpcId:
+                    Ref: VPCB9E5F0B4
+                aws:cdk:cloudformation:type: AWS::EC2::VPCGatewayAttachment
+        id   :  Cluster
+        path :  fargate/Cluster
+        lib  :  aws-cdk-lib.aws_ecs.Cluster
+            id   :  Resource
+            path :  fargate/Cluster/Resource
+            lib  :  aws-cdk-lib.aws_ecs.CfnCluster
+            attributes  :  
+                aws:cdk:cloudformation:props: {}
+                aws:cdk:cloudformation:type: AWS::ECS::Cluster
+        id   :  Service
+        path :  fargate/Service
+        lib  :  aws-cdk-lib.aws_ecs_patterns.ApplicationLoadBalancedFargateService
+            id   :  LB
+            path :  fargate/Service/LB
+            lib  :  aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationLoadBalancer
+                id   :  Resource
+                path :  fargate/Service/LB/Resource
+                lib  :  aws-cdk-lib.aws_elasticloadbalancingv2.CfnLoadBalancer
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      loadBalancerAttributes:
+                      - key: deletion_protection.enabled
+                        value: 'false'
+                      scheme: internet-facing
+                      securityGroups:
+                      - Fn::GetAtt:
+                        - ServiceLBSecurityGroupF7435A5C
+                        - GroupId
+                      subnets:
+                      - Ref: VPCPublicSubnet1SubnetB4246D30
+                      - Ref: VPCPublicSubnet2Subnet74179F39
+                      type: application
+                    aws:cdk:cloudformation:type: AWS::ElasticLoadBalancingV2::LoadBalancer
+                id   :  SecurityGroup
+                path :  fargate/Service/LB/SecurityGroup
+                lib  :  aws-cdk-lib.aws_ec2.SecurityGroup
+                    id   :  Resource
+                    path :  fargate/Service/LB/SecurityGroup/Resource
+                    lib  :  aws-cdk-lib.aws_ec2.CfnSecurityGroup
+                    attributes  :  
+                        aws:cdk:cloudformation:props:
+                          groupDescription: Automatically created Security Group for ELB fargateServiceLBF5762AB1
+                          securityGroupIngress:
+                          - cidrIp: 0.0.0.0/0
+                            description: Allow from anyone on port 80
+                            fromPort: 80
+                            ipProtocol: tcp
+                            toPort: 80
+                          vpcId:
+                            Ref: VPCB9E5F0B4
+                        aws:cdk:cloudformation:type: AWS::EC2::SecurityGroup
+                    id   :  to fargateServiceSecurityGroupA5A1D52F:80
+                    path :  fargate/Service/LB/SecurityGroup/to fargateServiceSecurityGroupA5A1D52F:80
+                    lib  :  aws-cdk-lib.aws_ec2.CfnSecurityGroupEgress
+                    attributes  :  
+                        aws:cdk:cloudformation:props:
+                          description: Load balancer to target
+                          destinationSecurityGroupId:
+                            Fn::GetAtt:
+                            - ServiceSecurityGroupEEA09B68
+                            - GroupId
+                          fromPort: 80
+                          groupId:
+                            Fn::GetAtt:
+                            - ServiceLBSecurityGroupF7435A5C
+                            - GroupId
+                          ipProtocol: tcp
+                          toPort: 80
+                        aws:cdk:cloudformation:type: AWS::EC2::SecurityGroupEgress
+                id   :  PublicListener
+                path :  fargate/Service/LB/PublicListener
+                lib  :  aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationListener
+                    id   :  Resource
+                    path :  fargate/Service/LB/PublicListener/Resource
+                    lib  :  aws-cdk-lib.aws_elasticloadbalancingv2.CfnListener
+                    attributes  :  
+                        aws:cdk:cloudformation:props:
+                          defaultActions:
+                          - targetGroupArn:
+                              Ref: ServiceLBPublicListenerECSGroup0CC8688C
+                            type: forward
+                          loadBalancerArn:
+                            Ref: ServiceLBE9A1ADBC
+                          port: 80
+                          protocol: HTTP
+                        aws:cdk:cloudformation:type: AWS::ElasticLoadBalancingV2::Listener
+                    id   :  ECSGroup
+                    path :  fargate/Service/LB/PublicListener/ECSGroup
+                    lib  :  aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationTargetGroup
+                        id   :  Resource
+                        path :  fargate/Service/LB/PublicListener/ECSGroup/Resource
+                        lib  :  aws-cdk-lib.aws_elasticloadbalancingv2.CfnTargetGroup
+                        attributes  :  
+                            aws:cdk:cloudformation:props:
+                              port: 80
+                              protocol: HTTP
+                              targetGroupAttributes:
+                              - key: stickiness.enabled
+                                value: 'false'
+                              targetType: ip
+                              vpcId:
+                                Ref: VPCB9E5F0B4
+                            aws:cdk:cloudformation:type: AWS::ElasticLoadBalancingV2::TargetGroup
+            id   :  LoadBalancerDNS
+            path :  fargate/Service/LoadBalancerDNS
+            lib  :  aws-cdk-lib.CfnOutput
+            id   :  ServiceURL
+            path :  fargate/Service/ServiceURL
+            lib  :  aws-cdk-lib.CfnOutput
+            id   :  TaskDef
+            path :  fargate/Service/TaskDef
+            lib  :  aws-cdk-lib.aws_ecs.FargateTaskDefinition
+                id   :  TaskRole
+                path :  fargate/Service/TaskDef/TaskRole
+                lib  :  aws-cdk-lib.aws_iam.Role
+                    id   :  Resource
+                    path :  fargate/Service/TaskDef/TaskRole/Resource
+                    lib  :  aws-cdk-lib.aws_iam.CfnRole
+                    attributes  :  
+                        aws:cdk:cloudformation:props:
+                          assumeRolePolicyDocument:
+                            Statement:
+                            - Action: sts:AssumeRole
+                              Effect: Allow
+                              Principal:
+                                Service: ecs-tasks.amazonaws.com
+                            Version: '2012-10-17'
+                        aws:cdk:cloudformation:type: AWS::IAM::Role
+                id   :  Resource
+                path :  fargate/Service/TaskDef/Resource
+                lib  :  aws-cdk-lib.aws_ecs.CfnTaskDefinition
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      containerDefinitions:
+                      - essential: true
+                        image: amazon/amazon-ecs-sample
+                        logConfiguration:
+                          logDriver: awslogs
+                          options:
+                            awslogs-group:
+                              Ref: ServiceTaskDefwebLogGroup2A898F61
+                            awslogs-region:
+                              Ref: AWS::Region
+                            awslogs-stream-prefix: Service
+                        name: web
+                        portMappings:
+                        - containerPort: 80
+                          protocol: tcp
+                      cpu: '256'
+                      executionRoleArn:
+                        Fn::GetAtt:
+                        - ServiceTaskDefExecutionRole919F7BE3
+                        - Arn
+                      family: fargateServiceTaskDefE32740B8
+                      memory: '512'
+                      networkMode: awsvpc
+                      requiresCompatibilities:
+                      - FARGATE
+                      taskRoleArn:
+                        Fn::GetAtt:
+                        - ServiceTaskDefTaskRole0CFE2F57
+                        - Arn
+                    aws:cdk:cloudformation:type: AWS::ECS::TaskDefinition
+                id   :  web
+                path :  fargate/Service/TaskDef/web
+                lib  :  aws-cdk-lib.aws_ecs.ContainerDefinition
+                    id   :  LogGroup
+                    path :  fargate/Service/TaskDef/web/LogGroup
+                    lib  :  aws-cdk-lib.aws_logs.LogGroup
+                        id   :  Resource
+                        path :  fargate/Service/TaskDef/web/LogGroup/Resource
+                        lib  :  aws-cdk-lib.aws_logs.CfnLogGroup
+                        attributes  :  
+                            aws:cdk:cloudformation:props: {}
+                            aws:cdk:cloudformation:type: AWS::Logs::LogGroup
+                id   :  ExecutionRole
+                path :  fargate/Service/TaskDef/ExecutionRole
+                lib  :  aws-cdk-lib.aws_iam.Role
+                    id   :  Resource
+                    path :  fargate/Service/TaskDef/ExecutionRole/Resource
+                    lib  :  aws-cdk-lib.aws_iam.CfnRole
+                    attributes  :  
+                        aws:cdk:cloudformation:props:
+                          assumeRolePolicyDocument:
+                            Statement:
+                            - Action: sts:AssumeRole
+                              Effect: Allow
+                              Principal:
+                                Service: ecs-tasks.amazonaws.com
+                            Version: '2012-10-17'
+                        aws:cdk:cloudformation:type: AWS::IAM::Role
+                    id   :  DefaultPolicy
+                    path :  fargate/Service/TaskDef/ExecutionRole/DefaultPolicy
+                    lib  :  aws-cdk-lib.aws_iam.Policy
+                        id   :  Resource
+                        path :  fargate/Service/TaskDef/ExecutionRole/DefaultPolicy/Resource
+                        lib  :  aws-cdk-lib.aws_iam.CfnPolicy
+                        attributes  :  
+                            aws:cdk:cloudformation:props:
+                              policyDocument:
+                                Statement:
+                                - Action:
+                                  - logs:CreateLogStream
+                                  - logs:PutLogEvents
+                                  Effect: Allow
+                                  Resource:
+                                    Fn::GetAtt:
+                                    - ServiceTaskDefwebLogGroup2A898F61
+                                    - Arn
+                                Version: '2012-10-17'
+                              policyName: ServiceTaskDefExecutionRoleDefaultPolicy3073559D
+                              roles:
+                              - Ref: ServiceTaskDefExecutionRole919F7BE3
+                            aws:cdk:cloudformation:type: AWS::IAM::Policy
+            id   :  Service
+            path :  fargate/Service/Service
+            lib  :  aws-cdk-lib.aws_ecs.FargateService
+                id   :  Service
+                path :  fargate/Service/Service/Service
+                lib  :  aws-cdk-lib.aws_ecs.CfnService
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      cluster:
+                        Ref: ClusterEB0386A7
+                      deploymentConfiguration:
+                        maximumPercent: 200
+                        minimumHealthyPercent: 50
+                      desiredCount: 2
+                      enableEcsManagedTags: false
+                      healthCheckGracePeriodSeconds: 60
+                      launchType: FARGATE
+                      loadBalancers:
+                      - containerName: web
+                        containerPort: 80
+                        targetGroupArn:
+                          Ref: ServiceLBPublicListenerECSGroup0CC8688C
+                      networkConfiguration:
+                        awsvpcConfiguration:
+                          assignPublicIp: DISABLED
+                          securityGroups:
+                          - Fn::GetAtt:
+                            - ServiceSecurityGroupEEA09B68
+                            - GroupId
+                          subnets:
+                          - Ref: VPCPrivateSubnet1Subnet8BCA10E0
+                          - Ref: VPCPrivateSubnet2SubnetCFCDAA7A
+                      taskDefinition:
+                        Ref: ServiceTaskDef1922A00F
+                    aws:cdk:cloudformation:type: AWS::ECS::Service
+                id   :  SecurityGroup
+                path :  fargate/Service/Service/SecurityGroup
+                lib  :  aws-cdk-lib.aws_ec2.SecurityGroup
+                    id   :  Resource
+                    path :  fargate/Service/Service/SecurityGroup/Resource
+                    lib  :  aws-cdk-lib.aws_ec2.CfnSecurityGroup
+                    attributes  :  
+                        aws:cdk:cloudformation:props:
+                          groupDescription: fargate/Service/Service/SecurityGroup
+                          securityGroupEgress:
+                          - cidrIp: 0.0.0.0/0
+                            description: Allow all outbound traffic by default
+                            ipProtocol: '-1'
+                          vpcId:
+                            Ref: VPCB9E5F0B4
+                        aws:cdk:cloudformation:type: AWS::EC2::SecurityGroup
+                    id   :  from fargateServiceLBSecurityGroup1BD468E3:80
+                    path :  fargate/Service/Service/SecurityGroup/from fargateServiceLBSecurityGroup1BD468E3:80
+                    lib  :  aws-cdk-lib.aws_ec2.CfnSecurityGroupIngress
+                    attributes  :  
+                        aws:cdk:cloudformation:props:
+                          description: Load balancer to target
+                          fromPort: 80
+                          groupId:
+                            Fn::GetAtt:
+                            - ServiceSecurityGroupEEA09B68
+                            - GroupId
+                          ipProtocol: tcp
+                          sourceSecurityGroupId:
+                            Fn::GetAtt:
+                            - ServiceLBSecurityGroupF7435A5C
+                            - GroupId
+                          toPort: 80
+                        aws:cdk:cloudformation:type: AWS::EC2::SecurityGroupIngress
+        id   :  CDKMetadata
+        path :  fargate/CDKMetadata
+        lib  :  constructs.Construct
+            id   :  Default
+            path :  fargate/CDKMetadata/Default
+            lib  :  aws-cdk-lib.CfnResource
+            id   :  Condition
+            path :  fargate/CDKMetadata/Condition
+            lib  :  aws-cdk-lib.CfnCondition

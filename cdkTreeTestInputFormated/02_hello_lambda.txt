@@ -1,0 +1,68 @@
+id   :  App
+path :  
+lib  :  aws-cdk-lib.App
+    id   :  Tree
+    path :  Tree
+    lib  :  constructs.Construct
+    id   :  hello-lambda
+    path :  hello-lambda
+    lib  :  aws-cdk-lib.Stack
+        id   :  HelloHandler
+        path :  hello-lambda/HelloHandler
+        lib  :  aws-cdk-lib.aws_lambda.Function
+            id   :  ServiceRole
+            path :  hello-lambda/HelloHandler/ServiceRole
+            lib  :  aws-cdk-lib.aws_iam.Role
+                id   :  Resource
+                path :  hello-lambda/HelloHandler/ServiceRole/Resource
+                lib  :  aws-cdk-lib.aws_iam.CfnRole
+                attributes  :  
+                    aws:cdk:cloudformation:props:
+                      assumeRolePolicyDocument:
+                        Statement:
+                        - Action: sts:AssumeRole
+                          Effect: Allow
+                          Principal:
+                            Service: lambda.amazonaws.com
+                        Version: '2012-10-17'
+                      managedPolicyArns:
+                      - Fn::Join:
+                        - ''
+                        - - 'arn:'
+                          - Ref: AWS::Partition
+                          - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+                    aws:cdk:cloudformation:type: AWS::IAM::Role
+            id   :  Code
+            path :  hello-lambda/HelloHandler/Code
+            lib  :  aws-cdk-lib.aws_s3_assets.Asset
+                id   :  Stage
+                path :  hello-lambda/HelloHandler/Code/Stage
+                lib  :  aws-cdk-lib.AssetStaging
+                id   :  AssetBucket
+                path :  hello-lambda/HelloHandler/Code/AssetBucket
+                lib  :  aws-cdk-lib.aws_s3.BucketBase
+            id   :  Resource
+            path :  hello-lambda/HelloHandler/Resource
+            lib  :  aws-cdk-lib.aws_lambda.CfnFunction
+            attributes  :  
+                aws:cdk:cloudformation:props:
+                  code:
+                    s3Bucket:
+                      Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}
+                    s3Key: 5f83e2a8bc7ca79afcc300d45df613dd32db40aa141b1ab5d88b910f3dbd995e.zip
+                  handler: hello.handler
+                  role:
+                    Fn::GetAtt:
+                    - HelloHandlerServiceRole11EF7C63
+                    - Arn
+                  runtime: python3.7
+                aws:cdk:cloudformation:type: AWS::Lambda::Function
+        id   :  CDKMetadata
+        path :  hello-lambda/CDKMetadata
+        lib  :  constructs.Construct
+            id   :  Default
+            path :  hello-lambda/CDKMetadata/Default
+            lib  :  aws-cdk-lib.CfnResource
+            id   :  Condition
+            path :  hello-lambda/CDKMetadata/Condition
+            lib  :  aws-cdk-lib.CfnCondition
